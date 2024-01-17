@@ -4,12 +4,12 @@ import React from "react"
 import * as z from "zod"
 import Image from "next/image"
 import { useForm } from "react-hook-form"
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { userValidation } from "@/lib/validations/user"
+import { UserValidation } from "@/lib/validations/user"
 import { isBase64Image } from "@/lib/utils"
 import { useUploadThing } from "@/lib/uploadthing"
 import { updateUser } from "@/lib/actions/user.actions"
@@ -37,7 +37,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
   const { startUpload } = useUploadThing("media")
 
   const form = useForm({
-    resolver: zodResolver(userValidation),
+    resolver: zodResolver(UserValidation),
     defaultValues: {
       profile_photo: user?.image || "",
       name: user?.name || "",
@@ -64,7 +64,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
     }
   }
 
-  const onSubmit = async (values: z.infer<typeof userValidation>) => {
+  const onSubmit = async (values: z.infer<typeof UserValidation>) => {
 
     const blob = values.profile_photo
     const hasImageChanged = isBase64Image(blob)
@@ -120,6 +120,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
                   onChange={(e) => handleImage(e, field.onChange)}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -139,6 +140,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -158,6 +160,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -177,6 +180,7 @@ const AccountProfile = ({user, buttonTitle}: Props) => {
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

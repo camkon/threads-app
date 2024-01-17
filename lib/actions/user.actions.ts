@@ -4,7 +4,7 @@ import { connectToDB } from "@/lib/mongoose"
 import User from "../models/user.model"
 import { revalidatePath } from "next/cache"
 
-interface Props {
+interface Params {
   userId: string,
   username: string,
   name: string,
@@ -20,7 +20,7 @@ export async function updateUser({
   bio,
   image,
   path
-}: Props): Promise<void> {
+}: Params): Promise<void> {
   connectToDB()
 
   try {
@@ -41,5 +41,19 @@ export async function updateUser({
     }
   } catch (error: any) {
     throw new Error(`Failed to create/update user: ${error.message}`)
+  }
+}
+
+export async function fetchUser(userId:string) {
+  connectToDB()
+  try {
+    return await User
+    .findOne({id: userId})
+    // .populate({
+    //   path: "communities",
+    //   model: Community
+    // })
+  } catch (error) {
+    throw new Error(`Failed to fetch user: ${error?.message}`)
   }
 }
