@@ -78,8 +78,7 @@ export async function fetchThreadById(id:string) {
   connectToDB()
 
   try {
-
-    //TODO : populate community later on
+    // TODO : populate community later on
     const thread = await Thread.findById(id)
       .populate({
         path: 'author',
@@ -92,7 +91,7 @@ export async function fetchThreadById(id:string) {
           {
             path: 'author',
             model: User,
-            select: '_id id parentId image'
+            select: '_id id name parentId image'
           },
           {
             path: 'children',
@@ -108,5 +107,41 @@ export async function fetchThreadById(id:string) {
     return thread
   } catch (error:any) {
     console.log('Failed to fetch thread details :', error?.message)
+  }
+}
+
+export async function addComment(
+  {
+    comment, 
+    threadId, 
+    userId, 
+    path
+  }:{
+    comment: string;
+    threadId: string;
+    userId: string;
+    path: string;
+  }) {
+  connectToDB()
+
+  try {
+    const originalThread = await Thread.findById(threadId)
+    if(!originalThread) {
+      throw new Error('Thread not found')
+    }
+
+    const commentThread = new Thread({
+      text: comment,
+      author: userId,
+      parentId: threadId
+    })
+
+    const saveCommentThread = await commentThread.save()
+    originalThread.children.push(saveCommentThread._id)
+
+    await originalThread.save()
+    revalidatePath(path)
+  } catch (error:any) {
+    console.log(`Error adding comment to thread : ${error?.message}`)
   }
 }
