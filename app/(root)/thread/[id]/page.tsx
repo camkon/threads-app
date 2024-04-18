@@ -54,6 +54,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
             createdAt={comment?.createdAt}
             comments={comment?.children}
             isComment={true}
+            showReplies={true}
         />
         ))}
       </div>
