@@ -1,11 +1,34 @@
 import AccountProfile from "@/components/forms/AccountProfile"
 import { currentUser } from '@clerk/nextjs'
 
+interface IUser {
+	id: string,
+	objectId: string,
+	username: string,
+	name: string,
+	bio: string,
+	image: string
+}
+
+interface IUserInfo {
+	_id: string,
+	username: string,
+	name: string,
+	bio: string,
+	image: string
+}
+
 async function Page() {
 
 	const user = await currentUser()
 
-	const userInfo = {}
+	const userInfo: IUserInfo = {
+		_id: "",
+		username: "",
+		name: "",
+		bio: "",
+		image: ""
+	}
 
 	const userData = {
 		id: user?.id,
