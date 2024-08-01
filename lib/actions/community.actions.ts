@@ -22,26 +22,28 @@ export async function createCommunity(
     // Find the user with the provided unique id
     const user = await User.findOne({ id: createdById });
 
-    if (!user) {
-      throw new Error("User not found"); // Handle the case if the user with the id is not found
-    }
+    console.log(user)
 
-    const newCommunity = new Community({
-      id,
-      name,
-      username,
-      image,
-      bio,
-      createdBy: user._id, // Use the mongoose ID of the user
-    });
+    // if (!user) {
+    //   throw new Error("User not found"); // Handle the case if the user with the id is not found
+    // }
 
-    const createdCommunity = await newCommunity.save();
+    // const newCommunity = new Community({
+    //   id,
+    //   name,
+    //   username,
+    //   image,
+    //   bio,
+    //   createdBy: user._id, // Use the mongoose ID of the user
+    // });
 
-    // Update User model
-    user.communities.push(createdCommunity._id);
-    await user.save();
+    // const createdCommunity = await newCommunity.save();
 
-    return createdCommunity;
+    // // Update User model
+    // user.communities.push(createdCommunity._id);
+    // await user.save();
+
+    // return createdCommunity;
   } catch (error) {
     // Handle any errors
     console.error("Error creating community:", error);

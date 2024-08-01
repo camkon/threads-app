@@ -1,3 +1,4 @@
+import { formDateString } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -25,7 +26,7 @@ interface Props {
   showReplies?: boolean,
 }
 
-const ThreadCard = ({key, id, currentUserId, parentId, content, author, community, comments, isComment, showReplies}:Props) => {
+const ThreadCard = ({key, id, currentUserId, parentId, content, author, community, createdAt, comments, isComment, showReplies}:Props) => {
   return(
     <article className={`flex w-full flex-col rounded-xl p-7 ${isComment ? 'px-0 xs:px-7 py-2' : 'bg-dark-2 p-7'}`}>
       <div className="flex items-start justify-between">
@@ -54,7 +55,7 @@ const ThreadCard = ({key, id, currentUserId, parentId, content, author, communit
 
             <div className="mt-4 flex flex-row gap-3">
               <div className="flex gap-3.5">
-                <Image src={'/assets/heart-gray.svg'} alt="heart" width={24} height={24} className="cursor-pointer object-contain"/>
+                <Image src={'/assets/heart-gray.svg'} alt="heart" width={24} height={24} className="cursor-pointer object-contain fill-red-600"/>
                 <Link href={`/thread/${id}`}>
                   <Image src={'/assets/reply.svg'} alt="heart" width={24} height={24} className="cursor-pointer object-contain"/>
                 </Link>
@@ -73,7 +74,18 @@ const ThreadCard = ({key, id, currentUserId, parentId, content, author, communit
           </div>
         </div>
 
+        {/* TODO : Delete Thread */}
+        {/* TODO : Show Comment Logos */}
+
       </div>
+      {!isComment && community && (
+        <Link href={`/communities/${community.id}`} className="flex items-center mt-5">
+          <p className="text-subtle-medium text-gray-1">
+            {formDateString(createdAt)} - {community.name} Community
+          </p>
+          <Image src={community.image} alt="Community logo" height={14} width={14} className="object-cover rounded-full ml-1"/>
+        </Link>
+      )}
     </article>
   )
 }
